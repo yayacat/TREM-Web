@@ -1,0 +1,1 @@
+var eew_data = {};
