@@ -28,7 +28,7 @@ Map<String, dynamic> info(dynamic data) {
   String _i;
   int _color = 0;
   if (data["data"].length == 0) {
-    _i = "?";
+    _i = "--";
     _color = color[0];
   } else {
     int _intensity = data["data"][0]["areaIntensity"];
@@ -71,7 +71,7 @@ class _ReportListPage extends State<ReportListPage> {
         _children.add(
           GestureDetector(
             onTap: () async {
-              if (_info["intensity"] != "?") {
+              if (_info["intensity"] != "--") {
                 if (data[i]["earthquakeNo"] % 1000 != 0) {
                   var ans = await get(
                       "https://exptech.com.tw/api/v1/earthquake/reports/${data[i]["earthquakeNo"]}");
