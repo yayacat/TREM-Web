@@ -214,6 +214,11 @@ class _HomePage extends State<HomePage> {
                         children: [
                           const SizedBox(width: double.infinity),
                           Text(
+                            "取得時間 | ${ws.gettimenow()}",
+                            style: const TextStyle(
+                                fontSize: 20, color: Colors.white),
+                          ),
+                          Text(
                             "當前測站數/全部測站數 | ${ws.getstation()}",
                             style: const TextStyle(
                                 fontSize: 20, color: Colors.white),

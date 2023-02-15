@@ -10,6 +10,7 @@ import 'package:localstorage/localstorage.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 import '../core/http_get.dart';
+import '../core/ntp.dart';
 
 enum SocketStatus {
   connected,
@@ -47,6 +48,7 @@ class WebSocketUtils {
   //   openSocket();
   // }
   var stationaddall = '';
+  String now = "";
 
   void openSocket() async {
     _websocket = WebSocketChannel.connect(Uri.parse(url));
@@ -66,7 +68,7 @@ class WebSocketUtils {
 			"key"      : "",
 		}));
     // 获取WebSocket的连接消息
-    _websocket!.stream.listen((event) {
+    _websocket!.stream.listen((event) async {
       try {
         var data = json.decode(event);
         // print('data is 👉 $data');
@@ -82,6 +84,10 @@ class WebSocketUtils {
             }
             all++;
           });
+          now = DateTime.fromMillisecondsSinceEpoch(await Now(false))
+            .toString()
+            .substring(0, 19)
+            .replaceAll("-", "/");
           stationaddall = '$add/$all';
           // toast('$add/$all');
           // toast('$raw');
@@ -135,5 +141,9 @@ class WebSocketUtils {
 
   getstation() {
     return stationaddall;
+  }
+
+  gettimenow() {
+    return now;
   }
 }
