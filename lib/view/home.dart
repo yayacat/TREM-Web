@@ -9,6 +9,8 @@ import 'package:trem_web/core/global.dart';
 import '../core/api.dart';
 import '../core/http_get.dart';
 import '../core/ntp.dart';
+import '../core/background.dart';
+import '../config.dart';
 
 var clock;
 
@@ -29,6 +31,8 @@ class _HomePage extends State<HomePage> {
   List eew_info = [];
   bool EEW = false;
   var imgkey = UniqueKey();
+
+  var ws = WebSocketUtils(Config.wsUrl);
 
   @override
   void dispose() {
@@ -189,6 +193,38 @@ class _HomePage extends State<HomePage> {
                 ),
               ),
             ),
+            const SizedBox(height: 10),
+            Material(
+              color: Colors.black,
+              child: Ink(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: const BorderRadius.all(Radius.circular(15)),
+                  border: Border.all(width: 3, color: Colors.green),
+                ),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(4),
+                  onTap: () {},
+                  child: Container(
+                    alignment: const Alignment(0, 0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(width: double.infinity),
+                          Text(
+                            "當前測站數/全部測站數 | ${ws.getstation()}",
+                            style: const TextStyle(
+                                fontSize: 20, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
             Visibility(
               visible: EEW,
               child: Column(
@@ -270,6 +306,13 @@ class _HomePage extends State<HomePage> {
                 ],
               ),
             ),
+          // const SizedBox(height: 24),
+          // StreamBuilder(
+          //   stream: get().stream,
+          //   builder: (context, snapshot) {
+          //     return Text(snapshot.hasData ? '${snapshot.data}' : '');
+          //   },
+          // )
           ],
         ),
       ),

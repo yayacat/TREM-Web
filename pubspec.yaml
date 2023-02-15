@@ -12,6 +12,11 @@ dependencies:
     sdk: flutter
   http: ^0.13.5
   shared_preferences: ^2.0.15
+  web_socket_channel: ^2.3.0
+  localstorage: ^4.0.0+1
+  firebase_core: ^2.5.0
+  firebase_messaging: ^14.2.2
+  overlay_support: ^2.1.0
 
   cupertino_icons: ^1.0.5
 

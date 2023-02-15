@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trem_web/view/init.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,10 +12,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'TREM Web',
-      home: InitPage(),
-      debugShowCheckedModeBanner: false,
+    return OverlaySupport.global(
+      child: MaterialApp(
+        title: 'TREM Web',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const InitPage(),
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }
