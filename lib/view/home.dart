@@ -101,9 +101,10 @@ class _HomePage extends State<HomePage> {
       backgroundColor: Colors.black,
       body: Padding(
         padding: const EdgeInsets.all(10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+        child: ListView(
+          physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
+          children: <Widget>[
             Material(
               color: Colors.black,
               child: Ink(
@@ -219,7 +220,76 @@ class _HomePage extends State<HomePage> {
                                 fontSize: 20, color: Colors.white),
                           ),
                           Text(
-                            "當前測站數/全部測站數 | ${ws.getstation()}",
+                            "當前測站數/全部測站數 | ${ws.get_station_state()}",
+                            style: const TextStyle(
+                                fontSize: 20, color: Colors.white),
+                          ),
+                          Text(
+                            "當前測站上線率 | ${ws.get_station_average()} %",
+                            style: const TextStyle(
+                                fontSize: 20, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Material(
+              color: Colors.black,
+              child: Ink(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: const BorderRadius.all(Radius.circular(15)),
+                  border: Border.all(width: 3, color: Colors.green),
+                ),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(4),
+                  onTap: () {},
+                  child: Container(
+                    alignment: const Alignment(0, 0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(width: double.infinity),
+                          Text(
+                            "${ws.get_trem_eq_description() != "" ? ws.get_trem_eq_description() : "地震檢知未發報"}",
+                            style: const TextStyle(
+                                fontSize: 20, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Material(
+              color: Colors.black,
+              child: Ink(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: const BorderRadius.all(Radius.circular(15)),
+                  border: Border.all(width: 3, color: Colors.green),
+                ),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(4),
+                  onTap: () {},
+                  child: Container(
+                    alignment: const Alignment(0, 0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(width: double.infinity),
+                          Text(
+                            "${ws.get_eew_description() != "" ? ws.get_eew_description() : "強震即時警報未發報"}",
                             style: const TextStyle(
                                 fontSize: 20, color: Colors.white),
                           ),
