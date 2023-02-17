@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:html';
 
-import 'package:trem_web/core/event.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:localstorage/localstorage.dart';
-// import 'package:firebase_core/firebase_core.dart' as firebase;
-// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 import '../core/http_get.dart';
 import '../core/ntp.dart';
@@ -50,12 +49,17 @@ class WebSocketUtils {
   //   // 连接 -> 接收消息
   //   openSocket();
   // }
+  final LocalStorage storage = LocalStorage('storage');
   var station_state = '';
   var station_average = 0.0;
   String now = "";
   // ignore: non_constant_identifier_names
   var trem_eq_description = "";
   var eew_description = "";
+  FlutterTts flutterTts = FlutterTts();
+  double volume = 2;
+  double pitch = 1.0;
+  double rate = 2;
 
   void openSocket() async {
     _websocket = WebSocketChannel.connect(Uri.parse(url));
@@ -64,10 +68,11 @@ class WebSocketUtils {
       _reconnectTimer?.cancel();
       _reconnectTimer = null;
     }
-    final LocalStorage storage = LocalStorage('storage');
-    final ans = await getuuid('https://exptech.com.tw/api/v1/et/uuid');
+    if (storage.getItem('UUID') == null){
+      final ans = await getuuid('https://exptech.com.tw/api/v1/et/uuid');
+      storage.setItem('UUID', ans);
+    }
     final station = await get('https://raw.githubusercontent.com/ExpTechTW/API/master/Json/earthquake/station.json');
-    storage.setItem('UUID', ans);
     print(storage.getItem('UUID'));
     _websocket!.sink.add(json.encode({
 			"uuid"     : storage.getItem('UUID'),
@@ -124,7 +129,7 @@ class WebSocketUtils {
           var stateStation = 0;
           trem_eq_description += '\n開始時間 > $now\n\n';
           data['list'].forEach((final String key, final value) {
-            trem_eq_description += '${station[key]['Loc']} 最大震度 > ${value}\n';
+            trem_eq_description += '${station[key]['Loc']} 最大震度 > ${IntensityI(value)}\n';
             stateStation++;
           });
           trem_eq_description += '\n第 ${data['number']} 報 | ${data['data_count']} 筆數據 ${data['final'] ? "(最終報)" : ""}\n';
@@ -132,7 +137,7 @@ class WebSocketUtils {
           final Now = DateTime.fromMillisecondsSinceEpoch(data['timestamp']).toString()
             .substring(0, 19)
             .replaceAll("-", "/");
-          trem_eq_description += '現在時間 > $Now\n';
+          trem_eq_description += '現在時間 > $Now';
           _trem_eq_reconnectTimer = Timer(const Duration(seconds: 60), () {
             trem_eq_description = "地震檢知未發報";
           });
@@ -163,7 +168,16 @@ class WebSocketUtils {
             .substring(0, 19)
             .replaceAll("-", "/");
           eew_description += '$now 左右發生顯著有感地震\n東經: ${data['lon']}\n北緯: ${data['lat']}\n深度: ${data['depth']}\n規模: ${data['scale']}\n第${data['number']}報\n發報單位: ${data['Unit']}\n慎防強烈搖晃，就近避難 [趴下、掩護、穩住]';
-          toast('$eew_description');
+          // toast('$eew_description');
+          Notification.requestPermission().then((String result){
+            if(result != 'granted') {
+              print('No notification permission granted!');
+            } else {
+              Notification(eew_description);
+            }
+          });
+          _speak(eew_description);
+          print(eew_description);
           _eew_reconnectTimer = Timer(const Duration(seconds: 60), () {
             eew_description = "強震即時警報未發報";
           });
@@ -202,6 +216,9 @@ class WebSocketUtils {
   // 断线重连
   void reconnect() {
     _reconnectTimer = Timer.periodic(Duration(seconds: 5), (timer) {
+      if (_websocket != null) {
+        _websocket!.sink.close();
+      }
       openSocket();
       print('重新连接中');
     });
@@ -247,10 +264,33 @@ class WebSocketUtils {
       return "6+";
     } else if (Intensity == 9) {
       return "7";
-    } else if (!Intensity) {
-      return "--";
     } else {
       return Intensity;
     }
+  }
+
+  getNotification() {
+    Notification.requestPermission().then((String result){
+      if(result != 'granted') {
+        print('No notification permission granted!');
+      } else {
+        Notification("允許通知成功");
+      }
+    });
+  }
+
+  Future _speak(eew_description) async {
+    await flutterTts.setLanguage('zh-TW');
+    await flutterTts.setSpeechRate(rate);
+    await flutterTts.setVolume(volume);
+    await flutterTts.setPitch(pitch);
+
+    if (eew_description.isNotEmpty) {
+      await flutterTts.speak(eew_description);
+    }
+  }
+
+  getUUID() {
+    return storage.getItem('UUID');
   }
 }

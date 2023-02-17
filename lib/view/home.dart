@@ -205,7 +205,9 @@ class _HomePage extends State<HomePage> {
                 ),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(4),
-                  onTap: () {},
+                  onTap: () {
+                    Clipboard.setData(ClipboardData(text: ws.getUUID()));
+                  },
                   child: Container(
                     alignment: const Alignment(0, 0),
                     child: Padding(
@@ -279,7 +281,9 @@ class _HomePage extends State<HomePage> {
                 ),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(4),
-                  onTap: () {},
+                  onTap: () {
+                    ws.getNotification();
+                  },
                   child: Container(
                     alignment: const Alignment(0, 0),
                     child: Padding(
