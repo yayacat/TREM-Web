@@ -61,7 +61,7 @@ class _ReportListPage extends State<ReportListPage> {
       if (start == 0) {
         start = 1;
         Data = await get(
-            "https://exptech.com.tw/api/v1/earthquake/reports?limit=50");
+            "https://lb-1.exptech.com.tw/api/v2/eq/report?limit=50");
       }
       List data = Data as List;
       _children = <Widget>[];
@@ -74,7 +74,7 @@ class _ReportListPage extends State<ReportListPage> {
               if (_info["intensity"] != "--") {
                 if (data[i]["earthquakeNo"] % 1000 != 0) {
                   var ans = await get(
-                      "https://exptech.com.tw/api/v1/earthquake/reports/${data[i]["earthquakeNo"]}");
+                      "https://lb-1.exptech.com.tw/api/v2/eq/report/${data[i]["earthquakeNo"]}");
                   if (ans != false) data[i]["report"] = ans;
                 }
                 Navigator.push(

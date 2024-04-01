@@ -71,7 +71,7 @@ class _HomePage extends State<HomePage> {
         update = true;
         await _updateImgWidget();
         update = false;
-        var ans = await get("https://exptech.com.tw/api/v1/trem/status");
+        var ans = await get("https://lb-1.exptech.com.tw/api/v1/trem/status");
         if (ans != false) {
           data = ans;
           if (data["eew"] != "" && data["eew"] != eew["ID"] + eew["Version"]) {
