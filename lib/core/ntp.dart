@@ -7,8 +7,8 @@ int local_timestamp = 0;
 int server_timestamp = 0;
 
 Future<void> getTime() async {
-  var ans = await get("https://exptech.com.tw/api/v1/et/ntp");
-  server_timestamp = ans["time"];
+  var ans = await get("https://lb-1.exptech.com.tw/ntp");
+  server_timestamp = ans;
   local_timestamp = DateTime.now().millisecondsSinceEpoch;
   check_timestamp = DateTime.now().millisecondsSinceEpoch;
 }

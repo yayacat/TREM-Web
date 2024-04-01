@@ -22,7 +22,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
-  String url = 'https://exptech.com.tw/api/v1/trem/rts-image';
+  String url = 'https://lb-1.exptech.com.tw/api/v1/trem/rts-image';
   late Widget _pic;
   bool update = false;
   var data = {};
@@ -79,7 +79,7 @@ class _HomePage extends State<HomePage> {
             eew = eew_data;
             if (eew["TimeStamp"] == null) {
               var eewAns = await get(
-                  "https://exptech.com.tw/api/v1/earthquake/eew?type=earthquake");
+                  "https://lb-1.exptech.com.tw/api/v1/eq/eew");
               if (eewAns != false) eew = eewAns;
             }
             if (eew["TimeStamp"] != null) {
