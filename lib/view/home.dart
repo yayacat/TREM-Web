@@ -71,24 +71,24 @@ class _HomePage extends State<HomePage> {
         update = true;
         await _updateImgWidget();
         update = false;
-        var ans = await get("https://lb-1.exptech.com.tw/api/v1/trem/status");
-        if (ans != false) {
-          data = ans;
-          if (data["eew"] != "" && data["eew"] != eew["ID"] + eew["Version"]) {
-            EEW = true;
-            eew = eew_data;
-            if (eew["TimeStamp"] == null) {
-              var eewAns = await get(
-                  "https://lb-1.exptech.com.tw/api/v1/eq/eew");
-              if (eewAns != false) eew = eewAns;
-            }
-            if (eew["TimeStamp"] != null) {
-              eew_info = await Earthquake(eew);
-            }
-          } else {
-            EEW = false;
-          }
-        }
+        // var ans = await get("https://lb-1.exptech.com.tw/api/v1/trem/status");
+        // if (ans != false) {
+        //   data = ans;
+        //   if (data["eew"] != "" && data["eew"] != eew["ID"] + eew["Version"]) {
+        //     EEW = true;
+        //     eew = eew_data;
+        //     if (eew["TimeStamp"] == null) {
+        //       var eewAns = await get(
+        //           "https://lb-1.exptech.com.tw/api/v1/eq/eew");
+        //       if (eewAns != false) eew = eewAns;
+        //     }
+        //     if (eew["TimeStamp"] != null) {
+        //       eew_info = await Earthquake(eew);
+        //     }
+        //   } else {
+        //     EEW = false;
+        //   }
+        // }
         now = DateTime.fromMillisecondsSinceEpoch(await Now(false))
             .toString()
             .substring(0, 19)
