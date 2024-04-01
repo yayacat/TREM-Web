@@ -74,7 +74,7 @@ class _ReportListPage extends State<ReportListPage> {
               if (_info["intensity"] != "--") {
                 if (data[i]["earthquakeNo"] % 1000 != 0) {
                   var ans = await get(
-                      "https://lb-1.exptech.com.tw/api/v2/eq/report/${data[i]["earthquakeNo"]}");
+                      "https://lb-1.exptech.com.tw/api/v2/eq/report/${data[i]["id"]}");
                   if (ans != false) data[i]["report"] = ans;
                 }
                 Navigator.push(
